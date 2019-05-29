@@ -20,6 +20,7 @@ my %options = (
 my $self;               # Références vers l'instance singleton de la classe.
 my $mainPID;            # ID du process servant de process pères aux différents Forks fils.
 my @forkChilds = ();    # Liste permettant le ressencement de tous les forks fils.
+my @taskQueu = ();      # 
 my $buffer;             # Référence vers une table de hash partagée.
 
 # Ajout des variables partagées au segment de mémoire partagé.
@@ -80,11 +81,13 @@ sub _startProcess { my ($function, @args) = @_;
     # Démarrage du traitement dans un nouveau fork
     my $mainPID = fork or die($!);
     if (not $mainPID) {
-        # Child process
-        $function->(@args);
-    } else {
         # Ajout du traitement
         _addFork($function, @args);
+    } else {
+        # Ecoute la fin 
+        while (1) {
+
+        }
     }
 }
 
